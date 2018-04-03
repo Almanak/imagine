@@ -5,32 +5,32 @@ from pathlib import Path
 
 @Gooey(program_name="imagine", return_to_config=True, header_height=60)
 def parse_args():
-    desc = "Skalér og konvertér billedfiler til jpg."
-    input_dir_msg = "Vælg den mappe med billedfiler, der skal konverteres"
-    output_dir_msg = "Vælg eller opret mappe, hvor jpg-filerne skal gemmes"
+    desc = "Scale and convert image-files to jpg-files."
+    input_dir_msg = "Choose folder with image-files to convert"
+    output_dir_msg = "Choose where to save jpg-files"
 
     parser = GooeyParser(description=desc)
     parser.add_argument("input_dir",
-                        metavar="Vælg billedmappe",
+                        metavar="Choose input-folder",
                         help=input_dir_msg,
                         widget="DirChooser")
                         # widget="MultiFileChooser")  # bug - upgrade later
     parser.add_argument("output_dir",
-                        metavar="Gem jpg-fil(erne)",
+                        metavar="Choose output-folder",
                         help=output_dir_msg,
                         widget="DirChooser")
     parser.add_argument('-mw',
                         '--mwidth',
-                        metavar="Maksimal billedbredde i pixels",
-                        help="max_width of images in pixels")
+                        metavar="Max width",
+                        help="max_width of output-images (in pixels)")
     parser.add_argument('-mh',
                         '--mheight',
-                        metavar="Maksimal billedhøjde i pixels",
-                        help="max_height of images in pixels")
+                        metavar="Max height",
+                        help="max_height of output-images (in pixels)")
     parser.add_argument('-q',
                         '--quality',
-                        metavar="JPG-kvalitet",
-                        help="Choose quality (between 10 and 95) of output-files. Defaults to 75")
+                        metavar="Jpg-quality",
+                        help="Choose output-quality (between 10 and 95). Defaults to 75")
     return parser.parse_args()
 
 
@@ -70,10 +70,9 @@ if __name__ == '__main__':
     # quality = 75 if not args.quality else args.quality
     quality = args.quality or 75
 
-    print("Arguments parsed", flush=True)
     images = get_images(Path(args.input_dir))
     print("Image(s) fetched", flush=True)
-    print("Working with image(s)...", flush=True)
+
     for path in images:
         image = Image.open(path)
         if max_height or max_width:
@@ -86,5 +85,7 @@ if __name__ == '__main__':
                    filename=Path(args.output_dir) / filename,
                    quality=int(quality))
         print("Succes: Converted " + str(path.name), flush=True)
+
     print("Done", flush=True)
-    print("Click 'edit' to convert additional files.", flush=True)
+    print("Click 'Edit' to convert additional files", flush=True)
+    print("Click 'Restart' to re-run the job", flush=True)
