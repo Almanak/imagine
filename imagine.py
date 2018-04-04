@@ -3,7 +3,7 @@ from gooey import Gooey, GooeyParser
 from pathlib import Path
 
 
-@Gooey(program_name="imagine", return_to_config=True, header_height=60)
+@Gooey(program_name="images2jpg", return_to_config=True, header_height=60)
 def parse_args():
     desc = "Scale and convert image-files to jpg-files."
     input_dir_msg = "Choose folder with image-files to convert"
@@ -71,7 +71,8 @@ if __name__ == '__main__':
     quality = args.quality or 75
 
     images = get_images(Path(args.input_dir))
-    print("Image(s) fetched", flush=True)
+    print("Fetching images...", flush=True)
+    print("Converting...", flush=True)
 
     for path in images:
         image = Image.open(path)
@@ -84,8 +85,8 @@ if __name__ == '__main__':
         save_image(image,
                    filename=Path(args.output_dir) / filename,
                    quality=int(quality))
-        print("Succes: Converted " + str(path.name), flush=True)
+        print("INFO: Converted " + str(path.name), flush=True)
 
-    print("Done", flush=True)
+    print("Done\n", flush=True)
     print("Click 'Edit' to convert additional files", flush=True)
     print("Click 'Restart' to re-run the job", flush=True)

@@ -1,0 +1,34 @@
+# -*- mode: python -*-
+import os
+import gooey
+
+gooey_root = os.path.dirname(gooey.__file__)
+block_cipher = None
+options = [('u', None, 'OPTION'), ('u', None, 'OPTION'), ('u', None, 'OPTION')]
+
+a = Analysis(['imagine.py'],
+             pathex=['C:\\Users\\azkb075\\developer\\imagine'],
+             hiddenimports=[],
+             hookspath=None,
+             runtime_hooks=None,
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher)
+pyz = PYZ(a.pure, a.zipped_data,
+             cipher=block_cipher)
+
+exe = EXE(pyz,
+          a.scripts,
+          a.binaries,
+          a.datas,
+          a.zipfiles,
+          options,
+          Tree(os.path.join(gooey_root, 'languages'), prefix = 'gooey/languages'),
+          Tree(os.path.join(gooey_root, 'images'), prefix = 'gooey/images'),
+          name='images2jpg',
+          debug=False,
+          strip=None,
+          upx=True,
+          console=False,
+          windowed=True,
+          icon=os.path.join(gooey_root, 'images', 'program_icon.ico'))
