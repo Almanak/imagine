@@ -1,6 +1,6 @@
 Gooey==1.0.0
 olefile==0.45.1
-Pillow==4.3.0
+Pillow==5.1.0
 psutil==5.4.2
 six==1.11.0
 wxPython==4.0.0b1
