@@ -1,11 +1,11 @@
-from PIL import Image
+from PIL import Image, ImageSequence
 from gooey import Gooey, GooeyParser
 from pathlib import Path
 
 
 @Gooey(program_name="images2jpg", return_to_config=True, header_height=60)
 def parse_args():
-    desc = "Scale and convert image-files to jpg-files."
+    desc = "Convert png, jpeg, bmp, jpeg 2000-files and more to (scaled) jpg-files."
     input_dir_msg = "Choose folder with image-files to convert"
     output_dir_msg = "Choose where to save jpg-files"
 
@@ -67,26 +67,38 @@ if __name__ == '__main__':
     args = parse_args()
     max_height = args.mheight if args.mheight else None
     max_width = args.mwidth if args.mwidth else None
-    # quality = 75 if not args.quality else args.quality
     quality = args.quality or 75
+    all_pages = True
 
     images = get_images(Path(args.input_dir))
-    print("Fetching images...", flush=True)
-    print("Converting...", flush=True)
+    print("WARMING UP...", flush=True)
 
+    errors = 0
     for path in images:
         image = Image.open(path)
-        if max_height or max_width:
-            image = resize_image(image,
-                                 max_height=max_height,
-                                 max_width=max_width)
-
         filename = path.stem + ".jpg"
-        save_image(image,
-                   filename=Path(args.output_dir) / filename,
-                   quality=int(quality))
-        print("INFO: Converted " + str(path.name), flush=True)
+        output_filename = Path(args.output_dir) / filename
 
-    print("Done\n", flush=True)
+        if max_height or max_width:
+            image = resize_image(image, max_height=max_height, max_width=max_width)
+
+        try:
+            save_image(image, filename=output_filename, quality=int(quality))
+        except KeyError:
+            print("ERROR: Conversion skipped. Unable to determine output-format from filename: " + filename, flush=True)
+            errors += 1
+        except IOError:
+            print("ERROR: Unable to convert file: " + path.name + ". Partial filedata may have been written to disc.", flush=True)
+            errors += 1
+
+    print("", flush=True)
+    print("DONE", flush=True)
+    print("Converted " + str(len(images) - errors) + " files", flush=True)
+    if errors > 0:
+        print("Unable to convert " + str(errors) + " files", flush=True)
+
+    print("")
+    print("ACTIONS")
     print("Click 'Edit' to convert additional files", flush=True)
     print("Click 'Restart' to re-run the job", flush=True)
+    print("\n", flush=True)
