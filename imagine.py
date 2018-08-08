@@ -3,7 +3,7 @@ from gooey import Gooey, GooeyParser
 from pathlib import Path
 
 
-@Gooey(program_name="images2jpg", return_to_config=True, header_height=60)
+@Gooey(program_name="imagine", return_to_config=True, header_height=60)
 def parse_args():
     desc = "Convert png, jpeg, bmp, jpeg 2000-files and more to (scaled) jpg-files."
     input_dir_msg = "Choose folder with image-files to convert"
