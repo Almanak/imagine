@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+olefile = "==0.45.1"
+psutil = "==5.4.2"
+six = "==1.11.0"
+Pillow = "==5.4.1"
+wxPython = "==4.0.0b1"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"
